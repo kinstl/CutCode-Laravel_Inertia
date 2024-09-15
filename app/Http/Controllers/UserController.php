@@ -77,6 +77,8 @@ class UserController extends Controller
             ])
         );
 
+        session()->flash('message', 'The user has been successfully edited');
+
         return redirect()->route('users.index');
     }
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
 class UserController extends Controller
@@ -15,7 +16,7 @@ class UserController extends Controller
     {
         return Inertia::render('Users/Index', [
             'title' => 'Users',
-            'users' => User::paginate(5)
+            'users' => User::orderByDesc('created_at')->paginate(5)
         ]);
     }
 
@@ -24,7 +25,9 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Users/Create', [
+            'title' => 'Add user',
+        ]);
     }
 
     /**
@@ -32,7 +35,15 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        User::create(
+            $request->validate([
+                'name' => ['required'],
+                'email' => ['required', 'email', Rule::unique('users')],
+                'password' => ['required'],
+            ])
+        );
+
+        return redirect()->route('users.index');
     }
 
     /**
@@ -48,7 +59,10 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        //
+        return Inertia::render('Users/Edit', [
+            'title' => 'Edit user',
+            'user' => $user,
+        ]);
     }
 
     /**
@@ -56,7 +70,14 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        //
+        $user->update(
+            $request->validate([
+                'name' => ['required'],
+                'email' => ['required', 'email', Rule::unique('users')->ignore($user->id)],
+            ])
+        );
+
+        return redirect()->route('users.index');
     }
 
     /**
@@ -64,6 +85,8 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        $user->delete();
+
+        return redirect()->back();
     }
 }

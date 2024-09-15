@@ -94,11 +94,17 @@
 </template>
 
 <script setup>
-import { Head, Link } from "@inertiajs/vue3";
+import { Head, Link, router } from "@inertiajs/vue3";
 import Pagination from "../../Shared/Pagination.vue";
 
 defineProps({
     title: String,
     users: Array,
 });
+
+const destroy = (id) => {
+    router.delete(route("users.destroy", id), {
+        onBefore: () => confirm("Are you sure you want to delete this user?"),
+    });
+};
 </script>

@@ -24,7 +24,7 @@
                                 link.url === null,
                         }"
                         v-html="link.label"
-                        class="bg-white border-gray-300 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium"
+                        class="border-gray-300 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium"
                     />
                 </nav>
             </div>
